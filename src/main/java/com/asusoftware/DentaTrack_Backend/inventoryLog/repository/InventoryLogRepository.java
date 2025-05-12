@@ -25,4 +25,7 @@ public interface InventoryLogRepository extends JpaRepository<InventoryLog, UUID
 
     List<InventoryLog> findByTimestampBetween(LocalDateTime start, LocalDateTime end);
 
+    List<InventoryLog> findByClinicIdAndTimestampBetween(UUID clinicId, LocalDateTime start, LocalDateTime end);
+
+
 }

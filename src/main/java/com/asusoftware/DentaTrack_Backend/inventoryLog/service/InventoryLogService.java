@@ -49,4 +49,9 @@ public class InventoryLogService {
         return logRepository.findByClinicId(clinicId);
     }
 
+    public List<InventoryLog> getLogsByClinicBetween(UUID clinicId, LocalDateTime start, LocalDateTime end) {
+        return logRepository.findByClinicIdAndTimestampBetween(clinicId, start, end);
+    }
+
+
 }
