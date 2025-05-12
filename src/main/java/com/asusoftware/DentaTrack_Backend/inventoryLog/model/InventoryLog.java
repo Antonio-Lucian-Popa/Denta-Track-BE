@@ -1,10 +1,14 @@
 package com.asusoftware.DentaTrack_Backend.inventoryLog.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
+@Builder
 @Entity
 @Table(name = "inventory_log")
 public class InventoryLog {

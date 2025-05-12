@@ -5,14 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
-    private UUID id;
+public class CreateProductDto {
     private String name;
     private String category;
     private String unit;
@@ -20,5 +18,5 @@ public class ProductDto {
     private int lowStockThreshold;
     private LocalDate expirationDate;
     private UUID clinicId;
-    private UUID userId;
 }
+

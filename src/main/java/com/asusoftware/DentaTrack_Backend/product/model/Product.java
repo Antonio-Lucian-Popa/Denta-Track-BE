@@ -1,11 +1,15 @@
 package com.asusoftware.DentaTrack_Backend.product.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
+@Data
 @Entity
 @Table(name = "products")
 public class Product {

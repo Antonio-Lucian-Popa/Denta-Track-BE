@@ -130,6 +130,10 @@ public class UserService {
         return userRepository.findClinicIdsWhereUserIsOwner(userId);
     }
 
+    public User getById(UUID id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Userul nu a fost gasit"));
+    }
+
 }
 
 
