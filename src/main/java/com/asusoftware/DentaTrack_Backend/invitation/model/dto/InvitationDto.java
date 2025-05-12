@@ -1,11 +1,15 @@
 package com.asusoftware.DentaTrack_Backend.invitation.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class InvitationDto {
     private UUID id;
     private String token;
@@ -13,6 +17,6 @@ public class InvitationDto {
     private String role;
     private UUID doctorId;
     private LocalDateTime expiresAt;
-    private Boolean used;
+    private boolean used;
     private LocalDateTime createdAt;
 }

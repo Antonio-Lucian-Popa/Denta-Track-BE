@@ -4,7 +4,7 @@ import com.asusoftware.DentaTrack_Backend.config.KeycloakService;
 import com.asusoftware.DentaTrack_Backend.exception.InvalidTokenException;
 import com.asusoftware.DentaTrack_Backend.exception.UserNotFoundException;
 import com.asusoftware.DentaTrack_Backend.invitation.model.Invitation;
-import com.asusoftware.DentaTrack_Backend.invitation.model.repository.InvitationRepository;
+import com.asusoftware.DentaTrack_Backend.invitation.repository.InvitationRepository;
 import com.asusoftware.DentaTrack_Backend.user.model.User;
 import com.asusoftware.DentaTrack_Backend.user.model.dto.LoginDto;
 import com.asusoftware.DentaTrack_Backend.user.model.dto.UserRegisterDto;

@@ -1,4 +1,4 @@
-package com.asusoftware.DentaTrack_Backend.invitation.model.repository;
+package com.asusoftware.DentaTrack_Backend.invitation.repository;
 
 import com.asusoftware.DentaTrack_Backend.invitation.model.Invitation;
 import org.springframework.data.jpa.repository.JpaRepository;
