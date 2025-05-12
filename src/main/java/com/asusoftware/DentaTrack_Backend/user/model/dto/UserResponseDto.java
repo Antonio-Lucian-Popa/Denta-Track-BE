@@ -1,18 +1,17 @@
 package com.asusoftware.DentaTrack_Backend.user.model.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.UUID;
 
-@Getter
-@Setter
-public class UserRegisterDto {
-    private String email;
+@Data
+public class UserResponseDto {
+    private UUID id;
     private String firstName;
     private String lastName;
     private String role;
     private UUID clinicId;
-    private UUID doctorId; // poate fi null
-    private String password;
+    private UUID doctorId;
+    private UUID keycloakId;
 }
+
