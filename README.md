@@ -140,8 +140,46 @@ Creează un cont nou (Keycloak + DB).
 
 #### `GET /api/v1/inventory-logs/clinic/{clinicId}` – Loguri pentru clinică
 
+#### `GET /api/v1/inventory-logs/clinic/{clinicId}/export` – Export Excel
 
+### 📅 Programări
 
+#### `POST /api/appointments` – Creează programare
+```json
+{
+  "clinicId": "uuid-clinic",
+  "dateTime": "2025-05-12T10:30:00",
+  "durationMinutes": 30,
+  "patientName": "Andrei Vasile",
+  "reason": "Consultație"
+}
+```
+#### `GET /api/v1/appointments/clinic/{clinicId}` – Programări clinică
+
+#### `GET /api/v1/appointments/doctor` – Programările mele (doctor curent)
+
+#### `PATCH /api/v1/appointments/{appointmentId}/status` – Actualizează statusul
+```json
+{
+  "status": "COMPLETED" // sau "CANCELED"
+}
+```
+
+### 📊 Dashboard clinică
+
+#### `GET /api/v1/dashboard/clinic/{clinicId}` – Statistici lunare
+```json
+{
+  "totalAppointments": 14,
+  "completedAppointments": 10,
+  "canceledAppointments": 2,
+  "lowStockCount": 3,
+  "expiredCount": 1,
+  "consumptionLogsThisMonth": 18,
+  "lowStockProducts": [...],
+  "expiredProducts": [...]
+}
+```
 
 1. Clonează proiectul:
    ```bash
