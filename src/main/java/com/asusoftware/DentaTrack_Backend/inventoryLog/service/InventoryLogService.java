@@ -1,5 +1,6 @@
 package com.asusoftware.DentaTrack_Backend.inventoryLog.service;
 
+import com.asusoftware.DentaTrack_Backend.inventoryLog.model.InventoryLog;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.model.dto.InventoryLogDto;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.repository.InventoryLogRepository;
 import com.asusoftware.DentaTrack_Backend.product.repository.ProductRepository;
@@ -43,4 +44,9 @@ public class InventoryLogService {
                 .map(log -> mapper.map(log, InventoryLogDto.class))
                 .collect(Collectors.toList());
     }
+
+    public List<InventoryLog> getRawLogsByClinic(UUID clinicId) {
+        return logRepository.findByClinicId(clinicId);
+    }
+
 }
