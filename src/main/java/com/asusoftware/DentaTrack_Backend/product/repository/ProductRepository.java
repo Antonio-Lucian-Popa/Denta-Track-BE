@@ -4,6 +4,7 @@ import com.asusoftware.DentaTrack_Backend.product.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,4 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
      * (folosit pentru a determina dacă face parte din clinică).
      */
     boolean existsByClinicIdAndUserId(UUID clinicId, UUID userId);
+
+    List<Product> findByClinicIdAndExpirationDateBefore(UUID clinicId, LocalDate date);
+
 }

@@ -4,6 +4,7 @@ import com.asusoftware.DentaTrack_Backend.appointment.model.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,5 +20,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
      * Returnează toate programările făcute de un anumit utilizator (medic).
      */
     List<Appointment> findByUserId(UUID userId);
+
+    int countByClinicIdAndDateTimeBetween(UUID clinicId, LocalDateTime start, LocalDateTime end);
+
+    int countByClinicIdAndStatusAndDateTimeBetween(UUID clinicId, String status, LocalDateTime start, LocalDateTime end);
+
 }
 
