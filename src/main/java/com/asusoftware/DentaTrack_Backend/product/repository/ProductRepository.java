@@ -19,4 +19,10 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
      * Returnează produsele dintr-o clinică aflate sub pragul minim (opțional dacă vrei direct în repo).
      */
     List<Product> findByClinicIdAndQuantityLessThanEqual(UUID clinicId, int threshold);
+
+    /**
+     * Verifică dacă un utilizator are produse înregistrate în clinică
+     * (folosit pentru a determina dacă face parte din clinică).
+     */
+    boolean existsByClinicIdAndUserId(UUID clinicId, UUID userId);
 }

@@ -6,6 +6,8 @@ import com.asusoftware.DentaTrack_Backend.clinic.model.dto.ClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.model.dto.CreateClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.repository.ClinicOwnerRepository;
 import com.asusoftware.DentaTrack_Backend.clinic.repository.ClinicRepository;
+import com.asusoftware.DentaTrack_Backend.product.model.Product;
+import com.asusoftware.DentaTrack_Backend.product.repository.ProductRepository;
 import com.asusoftware.DentaTrack_Backend.user.model.User;
 import com.asusoftware.DentaTrack_Backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class ClinicService {
 
     private final ClinicRepository clinicRepository;
+    private final ProductRepository productRepository;
     private final ClinicOwnerRepository clinicOwnerRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
@@ -87,5 +90,13 @@ public class ClinicService {
     public boolean isUserOwnerOfClinic(UUID userId, UUID clinicId) {
         return clinicOwnerRepository.existsByClinicIdAndUserId(clinicId, userId);
     }
+
+    public boolean isUserInClinic(UUID userId, UUID clinicId) {
+        // Owner sau doctor/asistent care are produse înregistrate în clinică
+        return isUserOwnerOfClinic(userId, clinicId)
+                || productRepository.existsByClinicIdAndUserId(clinicId, userId);
+    }
+
+
 }
 

@@ -118,4 +118,9 @@ public class ProductService {
                 .map(p -> mapper.map(p, ProductDto.class))
                 .collect(Collectors.toList());
     }
+
+    public Product getProductById(UUID productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Produsul cu ID-ul " + productId + " nu a fost găsit"));
+    }
 }

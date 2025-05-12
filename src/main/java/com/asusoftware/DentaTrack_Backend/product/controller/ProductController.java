@@ -1,5 +1,7 @@
 package com.asusoftware.DentaTrack_Backend.product.controller;
 
+import com.asusoftware.DentaTrack_Backend.clinic.service.ClinicService;
+import com.asusoftware.DentaTrack_Backend.product.model.Product;
 import com.asusoftware.DentaTrack_Backend.product.model.dto.CreateProductDto;
 import com.asusoftware.DentaTrack_Backend.product.model.dto.ProductDto;
 import com.asusoftware.DentaTrack_Backend.product.model.dto.UpdateStockDto;
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
+    private final ClinicService clinicService;
     private final UserService userService;
 
     /**
@@ -32,18 +35,32 @@ public class ProductController {
         UUID keycloakId = UUID.fromString(principal.getSubject());
         User user = userService.getByKeycloakId(keycloakId);
 
+        if (!clinicService.isUserOwnerOfClinic(user.getId(), dto.getClinicId())) {
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
+
         ProductDto product = productService.addProduct(user.getId(), dto);
         return ResponseEntity.ok(product);
     }
+
 
     /**
      * Listează toate produsele dintr-o clinică.
      */
     @GetMapping("/clinic/{clinicId}")
-    public ResponseEntity<List<ProductDto>> getProductsByClinic(@PathVariable UUID clinicId) {
+    public ResponseEntity<List<ProductDto>> getProductsByClinic(@AuthenticationPrincipal Jwt principal,
+                                                                @PathVariable UUID clinicId) {
+        UUID keycloakId = UUID.fromString(principal.getSubject());
+        User user = userService.getByKeycloakId(keycloakId);
+
+        if (!clinicService.isUserInClinic(user.getId(), clinicId)) {
+            return ResponseEntity.status(403).build();
+        }
+
         List<ProductDto> products = productService.getProductsByClinic(clinicId);
         return ResponseEntity.ok(products);
     }
+
 
     /**
      * Actualizează stocul unui produs (IN / OUT).
@@ -55,9 +72,17 @@ public class ProductController {
         UUID keycloakId = UUID.fromString(principal.getSubject());
         User user = userService.getByKeycloakId(keycloakId);
 
+        Product product = productService.getProductById(productId);
+
+        if (!clinicService.isUserInClinic(user.getId(), product.getClinicId())) {
+            return ResponseEntity.status(403).build();
+        }
+
+
         ProductDto updated = productService.updateStock(productId, dto, user.getId());
         return ResponseEntity.ok(updated);
     }
+
 
     /**
      * Returnează produsele sub pragul minim de stoc pentru alertă.
