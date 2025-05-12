@@ -181,6 +181,90 @@ Creează un cont nou (Keycloak + DB).
 }
 ```
 
+## 🔄 Flow-ul aplicației DentaTrack
+
+DentaTrack este o aplicație multi-clinică care permite gestiunea completă a unei clinici stomatologice. Fiecare utilizator are un rol specific, iar accesul este controlat granular per clinică.
+
+---
+
+### 🧑‍⚕️ 1. Înregistrare și autentificare
+
+- Utilizatorul (ex: un doctor) se înregistrează în aplicație.
+- La înregistrare este creat automat și în Keycloak.
+- După autentificare, primește token JWT pentru acces protejat.
+
+---
+
+### 🏥 2. Creare clinică
+
+- După autentificare, doctorul poate crea o clinică nouă.
+- Acesta devine **owner** (administrator) pentru acea clinică.
+- Un doctor poate administra mai multe clinici.
+
+---
+
+### 📬 3. Invitare personal
+
+- Ownerul trimite invitații către:
+    - Asistenți
+    - Alți doctori colaboratori
+- Invitația conține un token și rol (ASSISTANT / DOCTOR).
+- Invitatul se înregistrează prin linkul cu token → este automat legat de clinică.
+
+---
+
+### 📦 4. Gestionare produse (stocuri)
+
+- Asistenții și doctorii pot adăuga produse în stoc.
+- Pot face operațiuni de:
+    - **IN** – adăugare
+    - **OUT** – consum
+- Fiecare operațiune generează un log automat (istoric).
+
+---
+
+### 📅 5. Programări pacienți
+
+- Doctorii și/sau asistenții pot crea programări în agenda clinicii.
+- Programările au:
+    - Data / durată
+    - Nume pacient
+    - Status: `SCHEDULED`, `COMPLETED`, `CANCELED`
+
+---
+
+### 📊 6. Dashboard sumar clinică
+
+- Pentru fiecare clinică se pot vedea:
+    - Total programări (lună curentă)
+    - Programări completate / anulate
+    - Produse expirate / sub stoc
+    - Total consumuri efectuate
+
+---
+
+### 📤 7. Export Excel
+
+- Administratorul clinicii poate exporta logul de consum în format Excel.
+- Se pot aplica filtre (ex: perioadă).
+- Fișierul include:
+    - Nume produs
+    - Tip acțiune (IN/OUT)
+    - Cantitate
+    - Utilizator
+    - Data
+
+---
+
+## 🔐 Control acces
+
+- Accesul este bazat pe rol + clinică:
+    - Un user poate fi activ în mai multe clinici.
+    - Doar userii dintr-o clinică pot vedea/modifica datele respective.
+- Ownerii clinicilor au drepturi complete.
+
+---
+
 1. Clonează proiectul:
    ```bash
    git clone https://github.com/username/dentatrack-backend.git
