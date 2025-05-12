@@ -1,10 +1,14 @@
 package com.asusoftware.DentaTrack_Backend.appointment.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
+@Builder
 @Entity
 @Table(name = "appointments")
 public class Appointment {

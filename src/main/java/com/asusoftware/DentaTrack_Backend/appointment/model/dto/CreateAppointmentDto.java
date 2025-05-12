@@ -1,18 +1,20 @@
 package com.asusoftware.DentaTrack_Backend.appointment.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class AppointmentDto {
-    private UUID id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateAppointmentDto {
     private UUID clinicId;
-    private UUID userId;
     private LocalDateTime dateTime;
     private int durationMinutes;
     private String patientName;
     private String reason;
-    private String status;
 }
+

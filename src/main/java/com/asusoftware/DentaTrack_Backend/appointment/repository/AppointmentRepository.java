@@ -1,0 +1,23 @@
+package com.asusoftware.DentaTrack_Backend.appointment.repository;
+
+import com.asusoftware.DentaTrack_Backend.appointment.model.Appointment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.UUID;
+
+@Repository
+public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
+
+    /**
+     * Returnează toate programările dintr-o clinică.
+     */
+    List<Appointment> findByClinicId(UUID clinicId);
+
+    /**
+     * Returnează toate programările făcute de un anumit utilizator (medic).
+     */
+    List<Appointment> findByUserId(UUID userId);
+}
+
