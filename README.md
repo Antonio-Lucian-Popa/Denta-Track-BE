@@ -36,7 +36,7 @@
 
 ## 📌 API Reference
 
-> Prefix comun: `/api`  
+> Prefix comun: `/api/v1`  
 > Toate endpoint-urile necesită autentificare (`Authorization: Bearer <token>`)  
 > Datele sunt în format `application/json`
 
@@ -44,7 +44,7 @@
 
 ### 🔐 Autentificare
 
-#### `POST /api/auth/register`
+#### `POST /api/v1/auth/register`
 Creează un cont nou (Keycloak + DB).
 
 - Body:
@@ -56,12 +56,92 @@ Creează un cont nou (Keycloak + DB).
   "lastName": "Popescu",
   "role": "DOCTOR"
 }
-
 ```
 
+#### `POST /api/v1/auth/login` – Autentificare
+```json
+{
+  "email": "user@example.com",
+  "password": "parola123"
+}
+```
+
+### 🏥 Clinici
+
+#### `POST /api/v1/clinics` – Creează clinică
+```json
+{
+  "name": "Clinica Smile",
+  "address": "Str. Zâmbetului 12"
+}
+```
+
+#### `GET /api/v1/clinics` – Listează clinicile utilizatorului
 
 
-## ⚙️ Configurare locală
+### 🏥 Clinici
+
+#### `POST /api/v1/invitations` – Creează invitație
+```json
+{
+  "clinicId": "uuid-clinic",
+  "role": "ASSISTANT",
+  "doctorId": "uuid-doctor" // opțional
+}
+```
+
+#### `GET /api/v1/invitations/validate?token=...` – Validează token-ul
+
+
+### 👤 Utilizatori
+
+#### `GET /api/v1/users/me` – Datele userului curent
+
+#### `DELETE /api/v1/users/me` – Șterge userul curent
+
+### 📦 Produse (stocuri)
+
+#### `POST /api/v1/products` – Adaugă produs
+```json
+{
+  "name": "Lidocain",
+  "category": "Anestezice",
+  "unit": "ml",
+  "quantity": 10,
+  "lowStockThreshold": 3,
+  "expirationDate": "2025-12-01",
+  "clinicId": "uuid-clinic"
+}
+```
+
+#### `POST /api/products/{productId}/stock` –  Actualizare stoc
+```json
+{
+  "actionType": "OUT",
+  "quantity": 2,
+  "reason": "Folosit tratament carie"
+}
+```
+
+#### `GET /api/v1/products/clinic/{clinicId}` – Produse din clinică
+
+#### `GET /api/v1/products/clinic/{clinicId}/low-stock` – Produse sub limită
+
+### 👤 Utilizatori
+
+#### `GET /api/v1/users/me` – Datele userului curent
+
+
+## 🧾 Inventory Logs (istoric stocuri)
+
+#### `GET /api/v1/inventory-logs/product/{productId}` – Loguri pentru produs
+
+#### `GET /api/v1/inventory-logs/user/{userId}` – Loguri pentru utilizator
+
+#### `GET /api/v1/inventory-logs/clinic/{clinicId}` – Loguri pentru clinică
+
+
+
 
 1. Clonează proiectul:
    ```bash
