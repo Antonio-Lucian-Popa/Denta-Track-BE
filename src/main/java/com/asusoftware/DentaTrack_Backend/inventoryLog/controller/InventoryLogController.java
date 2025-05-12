@@ -4,6 +4,10 @@ import com.asusoftware.DentaTrack_Backend.inventoryLog.model.InventoryLog;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.model.dto.InventoryLogDto;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.service.InventoryExportService;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.service.InventoryLogService;
+import com.asusoftware.DentaTrack_Backend.product.model.Product;
+import com.asusoftware.DentaTrack_Backend.product.service.ProductService;
+import com.asusoftware.DentaTrack_Backend.user.model.User;
+import com.asusoftware.DentaTrack_Backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/inventory-logs")
@@ -22,6 +28,8 @@ public class InventoryLogController {
 
     private final InventoryLogService inventoryLogService;
     private final InventoryExportService inventoryExportService;
+    private final UserService userService;
+    private final ProductService productService;
 
     @GetMapping("/product/{productId}")
     public List<InventoryLogDto> getByProduct(@PathVariable UUID productId) {
@@ -49,19 +57,30 @@ public class InventoryLogController {
     public ResponseEntity<byte[]> exportLogsAsExcel(@PathVariable UUID clinicId) {
         try {
             List<InventoryLog> logs = inventoryLogService.getRawLogsByClinic(clinicId);
-            InputStream excel = inventoryExportService.exportToExcel(logs);
 
+            // Preluăm userii asociați clinicii
+            List<User> users = userService.getUsersEntityByClinic(clinicId);
+            Map<UUID, String> userNames = users.stream()
+                    .collect(Collectors.toMap(User::getId, u -> u.getFirstName() + " " + u.getLastName()));
+
+            // Mapare productId -> Nume produs
+            List<Product> products = productService.getProductsByClinicRaw(clinicId);
+            Map<UUID, String> productNames = products.stream()
+                    .collect(Collectors.toMap(Product::getId, Product::getName));
+
+            InputStream excel = inventoryExportService.exportToExcel(logs, userNames, productNames);
             byte[] fileBytes = excel.readAllBytes();
+
             return ResponseEntity.ok()
                     .header("Content-Disposition", "attachment; filename=inventory_logs.xlsx")
                     .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     .body(fileBytes);
 
         } catch (IOException e) {
-            // Poți loga eroarea și returna o eroare 500
             return ResponseEntity.internalServerError().build();
         }
     }
+
 
 
 }

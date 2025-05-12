@@ -123,4 +123,9 @@ public class ProductService {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Produsul cu ID-ul " + productId + " nu a fost găsit"));
     }
+
+    public List<Product> getProductsByClinicRaw(UUID clinicId) {
+        return productRepository.findByClinicId(clinicId);
+    }
+
 }

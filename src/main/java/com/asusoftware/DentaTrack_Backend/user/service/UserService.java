@@ -123,6 +123,10 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<User> getUsersEntityByClinic(UUID clinicId) {
+        return userRepository.findAllUsersByClinic(clinicId);
+    }
+
     /**
      * Obține toate clinicile unde userul este owner (pentru dashboard, permisiuni, etc).
      */
