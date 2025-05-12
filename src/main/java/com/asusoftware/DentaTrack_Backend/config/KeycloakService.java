@@ -43,12 +43,12 @@ public class KeycloakService {
 
         UserRepresentation user = new UserRepresentation();
         user.setUsername(userDTO.getEmail());
-        user.setFirstName(userDTO.getAlias());
-        user.setLastName(userDTO.getAlias() + "_");
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setEnabled(true);
         user.setEmailVerified(true);
-        user.setRealmRoles(Collections.singletonList(userDTO.getUserRole()));
+        user.setRealmRoles(Collections.singletonList(userDTO.getRole()));
 
         CredentialRepresentation password = new CredentialRepresentation();
         password.setType(CredentialRepresentation.PASSWORD);
