@@ -38,7 +38,6 @@ public class AppointmentService {
         }
 
         Appointment appointment = Appointment.builder()
-                .id(UUID.randomUUID())
                 .clinicId(dto.getClinicId())
                 .userId(userId)
                 .dateTime(dto.getDateTime())

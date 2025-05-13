@@ -38,7 +38,6 @@ public class ProductService {
         User user = userService.getById(userId);
 
         Product product = Product.builder()
-                .id(UUID.randomUUID())
                 .name(dto.getName())
                 .category(dto.getCategory())
                 .unit(dto.getUnit())
@@ -53,12 +52,12 @@ public class ProductService {
         productRepository.save(product);
 
         logRepository.save(InventoryLog.builder()
-                .id(UUID.randomUUID())
                 .productId(product.getId())
                 .actionType("IN")
                 .quantity(dto.getQuantity())
                 .reason("Adăugare inițială")
-                .userId(userId)
+                .userId(user.getId())
+                .clinicId(dto.getClinicId())
                 .timestamp(LocalDateTime.now())
                 .build());
 
