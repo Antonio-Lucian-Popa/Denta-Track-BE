@@ -71,10 +71,12 @@ CREATE TABLE inventory_log (
     quantity INTEGER NOT NULL,
     reason TEXT,
     user_id UUID NOT NULL,
+    clinic_id UUID NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_log_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    CONSTRAINT fk_log_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    CONSTRAINT fk_log_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT fk_log_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE
 );
 
 -- ============================

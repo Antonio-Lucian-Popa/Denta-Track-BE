@@ -1,5 +1,5 @@
 server:
-  port: 8086
+  port: 8080
 spring:
   datasource:
     url: jdbc:postgresql://antonio-dev.go.ro:15772/dentaTrackdb
@@ -28,7 +28,7 @@ keycloak:
   # auth-server-url: http://antonio-dev.go.ro:8081/keycloack-app/realms/gym-management-realm/protocol/openid-connect/auth
   auth-server-url: http://antonio-dev.go.ro:8081/keycloak-app/
   credentials:
-    secret: tLlxYlJW8rD6LSK5owXUqTc5Y8EjY3Ev
+    secret: 8pCQHAvnCxTsS2f3gUZe55fe8ywsADao
   admin:
     username: admin
     password: admin
@@ -42,5 +42,5 @@ upload:
   dir: uploads/
 
 external-link:
-  url: "http://localhost:8086/images/"
+  url: "http://localhost:8080/images/"
   #url: "http://antonio-dev.go.ro:8081/dentatrack-api/images/"

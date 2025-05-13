@@ -31,6 +31,9 @@ public class InventoryLog {
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
+    @Column(name = "clinic_id", nullable = false)
+    private UUID clinicId;
+
     private LocalDateTime timestamp = LocalDateTime.now();
 
 }

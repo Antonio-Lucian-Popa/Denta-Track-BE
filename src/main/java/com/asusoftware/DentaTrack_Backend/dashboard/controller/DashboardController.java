@@ -5,6 +5,7 @@ import com.asusoftware.DentaTrack_Backend.dashboard.model.dto.DashboardDto;
 import com.asusoftware.DentaTrack_Backend.dashboard.service.DashboardService;
 import com.asusoftware.DentaTrack_Backend.user.model.User;
 import com.asusoftware.DentaTrack_Backend.user.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/dashboard")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class DashboardController {
 
     private final DashboardService dashboardService;
