@@ -43,6 +43,7 @@ public class AppointmentService {
                 .dateTime(dto.getDateTime())
                 .durationMinutes(dto.getDurationMinutes())
                 .patientName(dto.getPatientName())
+                .patientPhone(dto.getPatientPhone())
                 .reason(dto.getReason())
                 .status("SCHEDULED")
                 .build();
