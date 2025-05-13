@@ -64,7 +64,7 @@ public class AppointmentController {
     /**
      * Actualizează statusul unei programări.
      */
-    @PatchMapping("/{appointmentId}/status")
+    @PutMapping("/{appointmentId}/status")
     public ResponseEntity<AppointmentDto> updateStatus(@AuthenticationPrincipal Jwt principal,
                                                        @PathVariable UUID appointmentId,
                                                        @RequestBody UpdateAppointmentStatusDto dto) {
