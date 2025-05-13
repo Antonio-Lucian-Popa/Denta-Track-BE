@@ -2,7 +2,7 @@ server:
   port: 8086
 spring:
   datasource:
-    url: jdbc:postgresql://antonio-dev.go.ro:15770/dentatrackdb
+    url: jdbc:postgresql://antonio-dev.go.ro:15772/dentaTrackdb
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
