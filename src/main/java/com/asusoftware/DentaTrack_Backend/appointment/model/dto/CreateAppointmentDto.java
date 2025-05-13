@@ -15,6 +15,7 @@ public class CreateAppointmentDto {
     private LocalDateTime dateTime;
     private int durationMinutes;
     private String patientName;
+    private String patientPhone;
     private String reason;
 }
 

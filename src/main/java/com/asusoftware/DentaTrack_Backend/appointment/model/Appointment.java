@@ -30,6 +30,9 @@ public class Appointment {
     @Column(name = "patient_name", nullable = false)
     private String patientName;
 
+    @Column(name = "patient_phone", nullable = false)
+    private String patientPhone;
+
     private String reason;
 
     @Column(nullable = false)

@@ -13,6 +13,7 @@ public class AppointmentDto {
     private LocalDateTime dateTime;
     private int durationMinutes;
     private String patientName;
+    private String patientPhone;
     private String reason;
     private String status;
 }
