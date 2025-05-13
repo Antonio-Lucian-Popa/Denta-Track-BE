@@ -101,6 +101,7 @@ public class ProductService {
                 .quantity(dto.getQuantity())
                 .reason(dto.getReason())
                 .userId(userId)
+                .clinicId(product.getClinicId())
                 .timestamp(LocalDateTime.now())
                 .build());
 
