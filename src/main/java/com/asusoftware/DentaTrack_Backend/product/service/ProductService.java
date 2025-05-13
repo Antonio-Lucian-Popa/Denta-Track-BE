@@ -96,7 +96,6 @@ public class ProductService {
         productRepository.save(product);
 
         logRepository.save(InventoryLog.builder()
-                .id(UUID.randomUUID())
                 .productId(product.getId())
                 .actionType(dto.getActionType())
                 .quantity(dto.getQuantity())
