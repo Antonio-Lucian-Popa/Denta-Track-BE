@@ -17,5 +17,6 @@ public class InventoryLogDto {
     private int quantity;
     private String reason;
     private UUID userId;
+    private String userNameOfAction;
     private LocalDateTime timestamp;
 }

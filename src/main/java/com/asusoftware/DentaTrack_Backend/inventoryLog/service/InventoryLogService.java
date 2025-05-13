@@ -4,6 +4,8 @@ import com.asusoftware.DentaTrack_Backend.inventoryLog.model.InventoryLog;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.model.dto.InventoryLogDto;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.repository.InventoryLogRepository;
 import com.asusoftware.DentaTrack_Backend.product.repository.ProductRepository;
+import com.asusoftware.DentaTrack_Backend.user.model.User;
+import com.asusoftware.DentaTrack_Backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class InventoryLogService {
 
     private final InventoryLogRepository logRepository;
     private final ProductRepository productRepository;
+    private final UserService userService;
     private final ModelMapper mapper;
 
     public List<InventoryLogDto> getLogsByProduct(UUID productId) {
@@ -35,13 +38,23 @@ public class InventoryLogService {
 
     public List<InventoryLogDto> getLogsByClinic(UUID clinicId) {
         return logRepository.findByClinicId(clinicId).stream()
-                .map(log -> mapper.map(log, InventoryLogDto.class))
+                .map(log -> {
+                    InventoryLogDto inventoryLogDto = mapper.map(log, InventoryLogDto.class);
+                    User user = userService.getById(inventoryLogDto.getUserId());
+                    inventoryLogDto.setUserNameOfAction(user.getFirstName() + " " + user.getLastName());
+                    return inventoryLogDto;
+                })
                 .collect(Collectors.toList());
     }
 
     public List<InventoryLogDto> getLogsBetween(LocalDateTime start, LocalDateTime end) {
         return logRepository.findByTimestampBetween(start, end).stream()
-                .map(log -> mapper.map(log, InventoryLogDto.class))
+                .map(log -> {
+                    InventoryLogDto inventoryLogDto = mapper.map(log, InventoryLogDto.class);
+                    User user = userService.getById(inventoryLogDto.getUserId());
+                    inventoryLogDto.setUserNameOfAction(user.getFirstName() + " " + user.getLastName());
+                    return inventoryLogDto;
+                })
                 .collect(Collectors.toList());
     }
 
