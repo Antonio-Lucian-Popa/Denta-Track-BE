@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/inventory-logs")
+@RequestMapping("/api/v1/inventory-logs")
 @RequiredArgsConstructor
 public class InventoryLogController {
 
