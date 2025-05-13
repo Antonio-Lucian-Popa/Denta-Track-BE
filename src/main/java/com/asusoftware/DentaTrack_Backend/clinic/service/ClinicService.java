@@ -42,7 +42,6 @@ public class ClinicService {
 
         // Creează clinica
         Clinic clinic = Clinic.builder()
-                .id(UUID.randomUUID())
                 .name(dto.getName())
                 .address(dto.getAddress())
                 .createdAt(LocalDateTime.now())
@@ -52,7 +51,6 @@ public class ClinicService {
 
         // Adaugă userul ca owner în clinic_owners
         ClinicOwner owner = ClinicOwner.builder()
-                .id(UUID.randomUUID())
                 .clinicId(clinic.getId())
                 .userId(user.getId())
                 .createdAt(LocalDateTime.now())
