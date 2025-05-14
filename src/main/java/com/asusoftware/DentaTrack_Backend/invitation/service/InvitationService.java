@@ -32,15 +32,16 @@ public class InvitationService {
         String token = UUID.randomUUID().toString();
 
         Invitation invitation = Invitation.builder()
-                .id(UUID.randomUUID())
                 .token(token)
                 .clinicId(dto.getClinicId())
                 .role(dto.getRole())
                 .doctorId(dto.getDoctorId())
-                .expiresAt(LocalDateTime.now().plusDays(7)) // valabil 7 zile
+                .expiresAt(LocalDateTime.now().plusDays(4)) // valabil 7 zile
                 .used(false)
                 .createdAt(LocalDateTime.now())
                 .build();
+
+        // Trebuie sa trimitem email la user cu token(adica invitatia)
 
         invitationRepository.save(invitation);
 

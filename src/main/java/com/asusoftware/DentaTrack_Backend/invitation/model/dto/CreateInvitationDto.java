@@ -10,6 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateInvitationDto {
+    private String email; // email of the user to invite
     private UUID clinicId;
     private String role;      // DOCTOR / ASSISTANT
     private UUID doctorId;    // doar pentru asistente
