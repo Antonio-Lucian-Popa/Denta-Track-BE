@@ -6,6 +6,7 @@ import com.asusoftware.DentaTrack_Backend.invitation.model.dto.InvitationDto;
 import com.asusoftware.DentaTrack_Backend.invitation.service.InvitationService;
 import com.asusoftware.DentaTrack_Backend.user.model.User;
 import com.asusoftware.DentaTrack_Backend.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,8 @@ public class InvitationController {
      */
     @PostMapping
     public ResponseEntity<InvitationDto> createInvitation(@AuthenticationPrincipal Jwt principal,
-                                                          @RequestBody CreateInvitationDto dto) {
+                                                          @RequestBody CreateInvitationDto dto,
+                                                          HttpServletRequest request) {
         UUID keycloakId = UUID.fromString(principal.getSubject());
         User creator = userService.getByKeycloakId(keycloakId);
 
@@ -39,8 +41,10 @@ public class InvitationController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
 
-        InvitationDto invitation = invitationService.generateInvitation(dto);
+
+        InvitationDto invitation = invitationService.generateInvitation(dto, baseUrl);
         return ResponseEntity.ok(invitation);
     }
 

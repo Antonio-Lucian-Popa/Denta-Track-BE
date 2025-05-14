@@ -1,10 +1,16 @@
 package com.asusoftware.DentaTrack_Backend.invitation.service;
 
+import com.asusoftware.DentaTrack_Backend.clinic.model.Clinic;
+import com.asusoftware.DentaTrack_Backend.clinic.model.dto.ClinicDto;
+import com.asusoftware.DentaTrack_Backend.clinic.service.ClinicService;
 import com.asusoftware.DentaTrack_Backend.exception.InvalidTokenException;
 import com.asusoftware.DentaTrack_Backend.invitation.model.Invitation;
 import com.asusoftware.DentaTrack_Backend.invitation.model.dto.CreateInvitationDto;
 import com.asusoftware.DentaTrack_Backend.invitation.model.dto.InvitationDto;
 import com.asusoftware.DentaTrack_Backend.invitation.repository.InvitationRepository;
+import com.asusoftware.DentaTrack_Backend.mail.service.MailService;
+import com.asusoftware.DentaTrack_Backend.user.model.User;
+import com.asusoftware.DentaTrack_Backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,14 +28,21 @@ import java.util.stream.Collectors;
 public class InvitationService {
 
     private final InvitationRepository invitationRepository;
+    private final UserService userService;
+    private final MailService mailService;
+    private final ClinicService clinicService;
     private final ModelMapper mapper;
 
     /**
      * Generează o invitație unică pentru o clinică și un rol.
      */
     @Transactional
-    public InvitationDto generateInvitation(CreateInvitationDto dto) {
+    public InvitationDto generateInvitation(CreateInvitationDto dto, String baseUrl) {
         String token = UUID.randomUUID().toString();
+
+        // trbeuie sa luam clinicId si doctorId
+        User doctor = userService.getById(dto.getDoctorId());
+        ClinicDto clinic = clinicService.getById(dto.getClinicId());
 
         Invitation invitation = Invitation.builder()
                 .token(token)
@@ -41,9 +54,12 @@ public class InvitationService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        // Trebuie sa trimitem email la user cu token(adica invitatia)
-
         invitationRepository.save(invitation);
+
+        // Trebuie sa trimitem email la user cu token(adica invitatia)
+        // 2. Trimiți mail
+        String link = baseUrl + "/login?token=" + invitation.getToken();
+        mailService.sendInvitationEmail(dto.getEmail(), link, clinic.getName(), dto.getRole(), doctor.getFirstName() + " " + doctor.getLastName());
 
         return mapper.map(invitation, InvitationDto.class);
     }
