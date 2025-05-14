@@ -22,17 +22,17 @@ spring:
         jwt:
           issuer-uri: http://antonio-dev.go.ro:8081/keycloak-app/realms/dentatrack-realm
 
-mail:
-  host: smtp.gmail.com
-  port: 587
-  username: denta.track.app@gmail.com
-  password: pvdersnsbpiqzzip
-  properties:
-    mail:
-      smtp:
-        auth: true
-        starttls:
-          enable: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: denta.track.app@gmail.com
+    password: pvdersnsbpiqzzip
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 keycloak:
   realm: dentatrack-realm
