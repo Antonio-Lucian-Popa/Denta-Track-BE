@@ -1,15 +1,19 @@
 package com.asusoftware.DentaTrack_Backend.clinic.service;
 
+import com.asusoftware.DentaTrack_Backend.appointment.repository.AppointmentRepository;
 import com.asusoftware.DentaTrack_Backend.clinic.model.Clinic;
 import com.asusoftware.DentaTrack_Backend.clinic.model.ClinicOwner;
 import com.asusoftware.DentaTrack_Backend.clinic.model.dto.ClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.model.dto.CreateClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.repository.ClinicOwnerRepository;
 import com.asusoftware.DentaTrack_Backend.clinic.repository.ClinicRepository;
+import com.asusoftware.DentaTrack_Backend.invitation.repository.InvitationRepository;
 import com.asusoftware.DentaTrack_Backend.product.model.Product;
 import com.asusoftware.DentaTrack_Backend.product.repository.ProductRepository;
 import com.asusoftware.DentaTrack_Backend.user.model.User;
+import com.asusoftware.DentaTrack_Backend.user.model.dto.UserDto;
 import com.asusoftware.DentaTrack_Backend.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -29,7 +33,9 @@ public class ClinicService {
     private final ProductRepository productRepository;
     private final ClinicOwnerRepository clinicOwnerRepository;
     private final UserRepository userRepository;
+    private final AppointmentRepository appointmentRepository;
     private final ModelMapper mapper;
+    private final InvitationRepository invitationRepository;
 
     /**
      * Creează o clinică și o asociază cu utilizatorul logat (owner).
@@ -94,6 +100,21 @@ public class ClinicService {
         return isUserOwnerOfClinic(userId, clinicId)
                 || productRepository.existsByClinicIdAndUserId(clinicId, userId);
     }
+
+    public List<UserDto> getUsersInClinic(UUID clinicId) {
+        List<User> users = userRepository.findUsersByClinic(clinicId);
+        return users.stream().map((user) -> mapper.map(user, UserDto.class)).toList();
+    }
+
+
+    public void removeUserFromClinic(UUID clinicId, UUID userId) {
+        // Șterge legătura clinică -> user din produsele și programările unde apare
+        productRepository.clearClinicUser(userId, clinicId);
+        appointmentRepository.clearClinicUser(userId, clinicId);
+        // Dacă vrei, poți șterge și invitațiile vechi (opțional)
+        invitationRepository.deleteByClinicIdAndDoctorId(clinicId, userId);
+    }
+
 
 
 }

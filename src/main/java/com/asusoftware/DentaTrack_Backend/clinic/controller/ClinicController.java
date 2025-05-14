@@ -4,6 +4,7 @@ import com.asusoftware.DentaTrack_Backend.clinic.model.dto.ClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.model.dto.CreateClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.service.ClinicService;
 import com.asusoftware.DentaTrack_Backend.user.model.User;
+import com.asusoftware.DentaTrack_Backend.user.model.dto.UserDto;
 import com.asusoftware.DentaTrack_Backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -63,4 +64,39 @@ public class ClinicController {
         ClinicDto clinic = clinicService.getById(id);
         return ResponseEntity.ok(clinic);
     }
+
+    /**
+     * Returnează toți utilizatorii (doctori și asistente) dintr-o clinică.
+     */
+    @GetMapping("/{id}/staff")
+    public ResponseEntity<List<UserDto>> getClinicStaff(@AuthenticationPrincipal Jwt principal,
+                                                        @PathVariable UUID id) {
+        UUID keycloakId = UUID.fromString(principal.getSubject());
+        User currentUser = userService.getByKeycloakId(keycloakId);
+
+        if (!clinicService.isUserOwnerOfClinic(currentUser.getId(), id)) {
+            return ResponseEntity.status(403).build();
+        }
+
+        List<UserDto> staff = clinicService.getUsersInClinic(id);
+        return ResponseEntity.ok(staff);
+    }
+
+    @DeleteMapping("/{clinicId}/users/{userId}")
+    public ResponseEntity<Void> removeUserFromClinic(@AuthenticationPrincipal Jwt principal,
+                                                     @PathVariable UUID clinicId,
+                                                     @PathVariable UUID userId) {
+        UUID keycloakId = UUID.fromString(principal.getSubject());
+        User currentUser = userService.getByKeycloakId(keycloakId);
+
+        // Doar ownerul clinicii are voie
+        if (!clinicService.isUserOwnerOfClinic(currentUser.getId(), clinicId)) {
+            return ResponseEntity.status(403).build();
+        }
+
+        clinicService.removeUserFromClinic(clinicId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

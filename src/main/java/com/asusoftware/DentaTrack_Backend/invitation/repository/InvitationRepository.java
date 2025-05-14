@@ -2,9 +2,11 @@ package com.asusoftware.DentaTrack_Backend.invitation.repository;
 
 import com.asusoftware.DentaTrack_Backend.invitation.model.Invitation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,4 +31,9 @@ public interface InvitationRepository extends JpaRepository<Invitation, UUID> {
      */
     @Query("SELECT i FROM Invitation i WHERE i.clinicId = :clinicId AND i.used = false AND i.expiresAt > CURRENT_TIMESTAMP")
     List<Invitation> findActiveInvitationsByClinic(@Param("clinicId") UUID clinicId);
+
+    @Modifying
+    @Transactional
+    void deleteByClinicIdAndDoctorId(UUID clinicId, UUID doctorId);
+
 }
