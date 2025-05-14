@@ -49,6 +49,7 @@ public class InvitationService {
                 .clinicId(dto.getClinicId())
                 .role(dto.getRole())
                 .doctorId(dto.getDoctorId())
+                .employeeEmail(dto.getEmployeeEmail())
                 .expiresAt(LocalDateTime.now().plusDays(4)) // valabil 7 zile
                 .used(false)
                 .createdAt(LocalDateTime.now())
@@ -58,8 +59,8 @@ public class InvitationService {
 
         // Trebuie sa trimitem email la user cu token(adica invitatia)
         // 2. Trimiți mail
-        String link = baseUrl + "/login?token=" + invitation.getToken();
-        mailService.sendInvitationEmail(dto.getEmail(), link, clinic.getName(), dto.getRole(), doctor.getFirstName() + " " + doctor.getLastName());
+        String link = "http://localhost:5173/dentatrack-fe" + "/login?token=" + invitation.getToken();
+        mailService.sendInvitationEmail(dto.getEmployeeEmail(), link, clinic.getName(), dto.getRole(), doctor.getFirstName() + " " + doctor.getLastName());
 
         return mapper.map(invitation, InvitationDto.class);
     }

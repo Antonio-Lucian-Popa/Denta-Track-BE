@@ -38,6 +38,9 @@ public class Invitation {
 
     private Boolean used = false;
 
+    @Column(name = "employee_email", nullable = false)
+    private String employeeEmail;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

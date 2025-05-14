@@ -16,6 +16,7 @@ public class InvitationDto {
     private UUID clinicId;
     private String role;
     private UUID doctorId;
+    private String employeeEmail;
     private LocalDateTime expiresAt;
     private boolean used;
     private LocalDateTime createdAt;

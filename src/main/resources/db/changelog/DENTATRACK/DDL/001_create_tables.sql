@@ -108,6 +108,7 @@ CREATE TABLE invitations (
     doctor_id UUID,
     expires_at TIMESTAMP NOT NULL,
     used BOOLEAN DEFAULT FALSE,
+    employee_email VARCHAR(50) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_invitation_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE,
