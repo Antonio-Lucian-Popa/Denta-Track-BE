@@ -82,6 +82,17 @@ public class ClinicController {
         return ResponseEntity.ok(staff);
     }
 
+    @GetMapping("/{clinicId}/is-owner")
+    public ResponseEntity<Boolean> isCurrentUserOwner(@AuthenticationPrincipal Jwt principal,
+                                                      @PathVariable UUID clinicId) {
+        UUID keycloakId = UUID.fromString(principal.getSubject());
+        User currentUser = userService.getByKeycloakId(keycloakId);
+
+        boolean isOwner = clinicService.isUserOwnerOfClinic(currentUser.getId(), clinicId);
+        return ResponseEntity.ok(isOwner);
+    }
+
+
     @DeleteMapping("/{clinicId}/users/{userId}")
     public ResponseEntity<Void> removeUserFromClinic(@AuthenticationPrincipal Jwt principal,
                                                      @PathVariable UUID clinicId,
