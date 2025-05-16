@@ -18,6 +18,7 @@ public interface ClinicOwnerRepository extends JpaRepository<ClinicOwner, UUID> 
 
     @Query("SELECT co.clinicId FROM ClinicOwner co WHERE co.userId = :userId")
     List<UUID> findClinicIdsByUserId(@Param("userId") UUID userId);
+
 }
 
 

@@ -46,18 +46,24 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT co.clinicId FROM ClinicOwner co WHERE co.userId = :userId")
     List<UUID> findClinicIdsWhereUserIsOwner(@Param("userId") UUID userId);
 
+    Optional<User> findByEmail(String email);
+
 
     @Query("""
-    SELECT DISTINCT u FROM User u
-    WHERE u.role IN ('DOCTOR', 'ASSISTANT')
-    AND (
-        EXISTS (SELECT 1 FROM Product p WHERE p.clinicId = :clinicId AND p.userId = u.id) OR
-        EXISTS (SELECT 1 FROM Appointment a WHERE a.clinicId = :clinicId AND a.userId = u.id)
+    SELECT u
+    FROM User u
+    JOIN ClinicStaff cs ON cs.userId = u.id
+    WHERE cs.clinicId = :clinicId
+""")
+    List<User> findUsersByClinic(UUID clinicId);
+
+    @Query("""
+    SELECT u FROM User u 
+    WHERE u.id IN (
+        SELECT cs.userId FROM ClinicStaff cs WHERE cs.clinicId = :clinicId
     )
 """)
-    List<User> findUsersByClinic(@Param("clinicId") UUID clinicId);
-
-    Optional<User> findByEmail(String email);
+    List<User> findUsersByClinicViaClinicStaff(@Param("clinicId") UUID clinicId);
 
 
 }

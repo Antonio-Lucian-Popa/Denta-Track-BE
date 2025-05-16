@@ -7,6 +7,7 @@ import com.asusoftware.DentaTrack_Backend.clinic.model.dto.ClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.model.dto.CreateClinicDto;
 import com.asusoftware.DentaTrack_Backend.clinic.repository.ClinicOwnerRepository;
 import com.asusoftware.DentaTrack_Backend.clinic.repository.ClinicRepository;
+import com.asusoftware.DentaTrack_Backend.clinic.repository.ClinicStaffRepository;
 import com.asusoftware.DentaTrack_Backend.invitation.repository.InvitationRepository;
 import com.asusoftware.DentaTrack_Backend.product.model.Product;
 import com.asusoftware.DentaTrack_Backend.product.repository.ProductRepository;
@@ -21,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.NotFoundException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,7 @@ public class ClinicService {
     private final ClinicOwnerRepository clinicOwnerRepository;
     private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
+    private final ClinicStaffRepository clinicStaffRepository;
     private final ModelMapper mapper;
     private final InvitationRepository invitationRepository;
 
@@ -71,9 +75,14 @@ public class ClinicService {
      * Returnează toate clinicile unde userul este owner.
      */
     public List<ClinicDto> getClinicsForUser(UUID userId) {
-        List<UUID> clinicIds = clinicOwnerRepository.findClinicIdsByUserId(userId);
-        List<Clinic> clinics = clinicRepository.findAllById(clinicIds);
+        List<UUID> ownerClinics = clinicOwnerRepository.findClinicIdsByUserId(userId);
+        List<UUID> staffClinics = clinicStaffRepository.findClinicIdsByUserId(userId);
 
+        Set<UUID> allClinicIds = new HashSet<>();
+        allClinicIds.addAll(ownerClinics);
+        allClinicIds.addAll(staffClinics);
+
+        List<Clinic> clinics = clinicRepository.findAllById(allClinicIds);
         return clinics.stream()
                 .map(clinic -> mapper.map(clinic, ClinicDto.class))
                 .collect(Collectors.toList());
@@ -96,22 +105,20 @@ public class ClinicService {
     }
 
     public boolean isUserInClinic(UUID userId, UUID clinicId) {
-        // Owner sau doctor/asistent care are produse înregistrate în clinică
         return isUserOwnerOfClinic(userId, clinicId)
-                || productRepository.existsByClinicIdAndUserId(clinicId, userId);
+                || clinicStaffRepository.existsByClinicIdAndUserId(clinicId, userId);
     }
 
     public List<UserDto> getUsersInClinic(UUID clinicId) {
-        List<User> users = userRepository.findUsersByClinic(clinicId);
-        return users.stream().map((user) -> mapper.map(user, UserDto.class)).toList();
+        List<User> users = userRepository.findUsersByClinicViaClinicStaff(clinicId);
+        return users.stream().map(user -> mapper.map(user, UserDto.class)).toList();
     }
 
 
     public void removeUserFromClinic(UUID clinicId, UUID userId) {
-        // Șterge legătura clinică -> user din produsele și programările unde apare
+        clinicStaffRepository.deleteByClinicIdAndUserId(clinicId, userId);
         productRepository.clearClinicUser(userId, clinicId);
         appointmentRepository.clearClinicUser(userId, clinicId);
-        // Dacă vrei, poți șterge și invitațiile vechi (opțional)
         invitationRepository.deleteByClinicIdAndDoctorId(clinicId, userId);
     }
 
