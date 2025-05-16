@@ -1,6 +1,7 @@
 package com.asusoftware.DentaTrack_Backend.user.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,11 +28,16 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Email
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "keycloak_id", nullable = false, unique = true)
     private UUID keycloakId;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private String role; // ADMIN, DOCTOR, ASSISTANT
+    private UserRole role; // ADMIN, DOCTOR, ASSISTANT
 
     @Column(name = "doctor_id")
     private UUID doctorId; // doar dacă userul este asistent

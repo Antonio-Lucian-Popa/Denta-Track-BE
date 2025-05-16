@@ -57,6 +57,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 """)
     List<User> findUsersByClinic(@Param("clinicId") UUID clinicId);
 
+    Optional<User> findByEmail(String email);
 
 
 }

@@ -1,5 +1,6 @@
 package com.asusoftware.DentaTrack_Backend.user.model.dto;
 
+import com.asusoftware.DentaTrack_Backend.user.model.UserRole;
 import lombok.Data;
 
 import java.util.UUID;
@@ -9,7 +10,8 @@ public class UserResponseDto {
     private UUID id;
     private String firstName;
     private String lastName;
-    private String role;
+    private String email;
+    private UserRole role;
     private UUID clinicId;
     private UUID doctorId;
     private UUID keycloakId;

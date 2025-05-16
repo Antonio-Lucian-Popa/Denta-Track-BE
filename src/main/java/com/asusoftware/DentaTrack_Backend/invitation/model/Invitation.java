@@ -1,5 +1,6 @@
 package com.asusoftware.DentaTrack_Backend.invitation.model;
 
+import com.asusoftware.DentaTrack_Backend.user.model.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,8 +28,9 @@ public class Invitation {
     @Column(name = "clinic_id", nullable = false)
     private UUID clinicId;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private UserRole role;
 
     @Column(name = "doctor_id")
     private UUID doctorId;

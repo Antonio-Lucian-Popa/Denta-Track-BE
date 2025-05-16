@@ -20,6 +20,7 @@ CREATE TABLE users (
     id UUID PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
     keycloak_id UUID NOT NULL UNIQUE,
     role VARCHAR(50) NOT NULL, -- DOCTOR / ASSISTANT / ADMIN
     doctor_id UUID,
@@ -40,6 +41,17 @@ CREATE TABLE clinic_owners (
     CONSTRAINT fk_owner_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE,
     CONSTRAINT fk_owner_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT unique_owner_per_clinic UNIQUE (clinic_id, user_id)
+);
+
+CREATE TABLE clinic_staff (
+    id UUID PRIMARY KEY,
+    clinic_id UUID NOT NULL,
+    user_id UUID NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_staff_clinic FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE,
+    CONSTRAINT fk_staff_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT unique_clinic_user UNIQUE (clinic_id, user_id)
 );
 
 -- ============================

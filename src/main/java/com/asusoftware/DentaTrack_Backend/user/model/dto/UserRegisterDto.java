@@ -1,5 +1,6 @@
 package com.asusoftware.DentaTrack_Backend.user.model.dto;
 
+import com.asusoftware.DentaTrack_Backend.user.model.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ public class UserRegisterDto {
     private String email;
     private String firstName;
     private String lastName;
-    private String role;
+    private UserRole role;
     private UUID clinicId;
     private UUID doctorId; // poate fi null
     private String password;

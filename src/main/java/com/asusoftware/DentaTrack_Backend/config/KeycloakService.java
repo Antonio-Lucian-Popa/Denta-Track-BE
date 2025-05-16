@@ -48,7 +48,7 @@ public class KeycloakService {
         user.setEmail(userDTO.getEmail());
         user.setEnabled(true);
         user.setEmailVerified(true);
-        user.setRealmRoles(Collections.singletonList(userDTO.getRole()));
+        user.setRealmRoles(Collections.singletonList(userDTO.getRole().name()));
 
         CredentialRepresentation password = new CredentialRepresentation();
         password.setType(CredentialRepresentation.PASSWORD);
