@@ -46,6 +46,7 @@ public class UserService {
                 .id(UUID.randomUUID())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
+                .email(dto.getEmail())
                 .keycloakId(UUID.fromString(keycloakId))
                 .role(dto.getRole()) // ex: DOCTOR
                 .doctorId(dto.getDoctorId()) // null dacă nu e asistent
@@ -101,6 +102,7 @@ public class UserService {
         user = User.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
+                .email(dto.getEmail())
                 .keycloakId(UUID.fromString(keycloakId))
                 .role(invitation.getRole())
                 .doctorId(invitation.getDoctorId())
