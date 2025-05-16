@@ -115,6 +115,7 @@ public class ClinicService {
     }
 
 
+    @Transactional
     public void removeUserFromClinic(UUID clinicId, UUID userId) {
         clinicStaffRepository.deleteByClinicIdAndUserId(clinicId, userId);
         productRepository.clearClinicUser(userId, clinicId);
