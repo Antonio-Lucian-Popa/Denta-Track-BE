@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ClinicStaff {
 
+    @GeneratedValue
     @Id
     private UUID id;
 
