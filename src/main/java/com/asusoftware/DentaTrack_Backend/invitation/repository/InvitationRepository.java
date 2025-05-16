@@ -34,6 +34,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, UUID> {
 
     @Modifying
     @Transactional
-    void deleteByClinicIdAndDoctorId(UUID clinicId, UUID doctorId);
+    @Query("DELETE FROM Invitation i WHERE i.clinicId = :clinicId AND i.doctorId = :doctorId")
+    void deleteByClinicIdAndDoctorId(@Param("clinicId") UUID clinicId, @Param("doctorId") UUID doctorId);
 
 }
