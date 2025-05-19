@@ -36,5 +36,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("UPDATE Product p SET p.userId = NULL WHERE p.userId = :userId AND p.clinicId = :clinicId")
     void clearClinicUser(@Param("userId") UUID userId, @Param("clinicId") UUID clinicId);
 
+    @Query("SELECT p FROM Product p WHERE p.expirationDate IS NOT NULL AND p.expirationDate <= :date")
+    List<Product> findExpiringInNextDays(@Param("date") LocalDate date);
+
 
 }

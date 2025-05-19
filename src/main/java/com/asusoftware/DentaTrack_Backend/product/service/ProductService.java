@@ -2,6 +2,8 @@ package com.asusoftware.DentaTrack_Backend.product.service;
 
 import com.asusoftware.DentaTrack_Backend.inventoryLog.model.InventoryLog;
 import com.asusoftware.DentaTrack_Backend.inventoryLog.repository.InventoryLogRepository;
+import com.asusoftware.DentaTrack_Backend.notification.model.NotificationType;
+import com.asusoftware.DentaTrack_Backend.notification.service.NotificationService;
 import com.asusoftware.DentaTrack_Backend.product.model.Product;
 import com.asusoftware.DentaTrack_Backend.product.model.dto.CreateProductDto;
 import com.asusoftware.DentaTrack_Backend.product.model.dto.ProductDto;
@@ -28,6 +30,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final InventoryLogRepository logRepository;
     private final UserService userService;
+    private final NotificationService notificationService;
+
     private final ModelMapper mapper;
 
     /**
@@ -104,6 +108,15 @@ public class ProductService {
                 .clinicId(product.getClinicId())
                 .timestamp(LocalDateTime.now())
                 .build());
+
+        if (product.getQuantity() <= product.getLowStockThreshold()) {
+            notificationService.notifyClinic(
+                    product.getClinicId(),
+                    "Low Stock Alert",
+                    product.getName() + " is below minimum stock level",
+                    NotificationType.WARNING
+            );
+        }
 
         return mapper.map(product, ProductDto.class);
     }
