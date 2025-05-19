@@ -103,4 +103,16 @@ public class InvitationService {
                 .map(i -> mapper.map(i, InvitationDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void deleteInvitation(UUID invitationId) {
+        invitationRepository.deleteById(invitationId);
+    }
+
+    public boolean canDeleteInvitation(UUID invitationId, UUID userId) {
+        return invitationRepository.findById(invitationId)
+                .map(inv -> clinicService.isUserOwnerOfClinic(userId, inv.getClinicId()))
+                .orElse(false);
+    }
+
 }

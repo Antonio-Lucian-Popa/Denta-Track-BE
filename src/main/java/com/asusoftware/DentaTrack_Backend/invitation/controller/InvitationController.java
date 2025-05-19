@@ -66,4 +66,20 @@ public class InvitationController {
         List<InvitationDto> invitations = invitationService.getActiveInvitations(clinicId);
         return ResponseEntity.ok(invitations);
     }
+
+    @DeleteMapping("/{invitationId}")
+    public ResponseEntity<Void> deleteInvitation(@PathVariable UUID invitationId,
+                                                 @AuthenticationPrincipal Jwt principal) {
+        UUID keycloakId = UUID.fromString(principal.getSubject());
+        User user = userService.getByKeycloakId(keycloakId);
+
+        // verifică dacă userul e owner într-o clinică cu această invitație
+        if (!invitationService.canDeleteInvitation(invitationId, user.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        invitationService.deleteInvitation(invitationId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
