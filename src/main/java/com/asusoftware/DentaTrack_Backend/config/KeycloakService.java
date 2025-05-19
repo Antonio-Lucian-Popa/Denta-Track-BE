@@ -1,5 +1,6 @@
 package com.asusoftware.DentaTrack_Backend.config;
 
+import com.asusoftware.DentaTrack_Backend.exception.UserAlreadyExistsException;
 import com.asusoftware.DentaTrack_Backend.user.model.dto.LoginDto;
 import com.asusoftware.DentaTrack_Backend.user.model.dto.UserRegisterDto;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,10 @@ public class KeycloakService {
         if (response.getStatus() == 201) {
             String location = response.getHeaderString("Location");
             return location.substring(location.lastIndexOf('/') + 1);
-        } else {
+        } else if (response.getStatus() == 409) {
+            throw new UserAlreadyExistsException("Un cont cu acest email există deja.");
+        }
+        else {
             throw new RuntimeException("Failed to create user in Keycloak: " + response.getStatus());
         }
     }
