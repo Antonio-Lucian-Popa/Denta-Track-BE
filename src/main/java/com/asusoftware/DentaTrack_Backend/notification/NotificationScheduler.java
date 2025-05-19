@@ -39,7 +39,9 @@ public class NotificationScheduler {
             );
         }
 
-        List<Appointment> upcoming = appointmentRepository.findAppointmentsInNextHour();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime inOneHour = now.plusHours(1);
+        List<Appointment> upcoming = appointmentRepository.findAppointmentsInNextHour(now, inOneHour);
         for (Appointment appointment : upcoming) {
             notificationService.sendNotificationToClinic(
                     appointment.getClinicId(),
