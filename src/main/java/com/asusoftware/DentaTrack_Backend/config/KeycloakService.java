@@ -13,7 +13,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -79,17 +79,17 @@ public class KeycloakService {
 
     public AccessTokenResponse refreshToken(String refreshToken) {
         try {
-            var client = javax.ws.rs.client.ClientBuilder.newClient();
+            var client = jakarta.ws.rs.client.ClientBuilder.newClient();
             var target = client.target(authServerUrl + "/realms/" + realm + "/protocol/openid-connect/token");
 
-            var form = new javax.ws.rs.core.Form();
+            var form = new jakarta.ws.rs.core.Form();
             form.param("grant_type", "refresh_token");
             form.param("client_id", clientId);
             form.param("client_secret", clientSecret);
             form.param("refresh_token", refreshToken);
 
             return target.request()
-                    .post(javax.ws.rs.client.Entity.form(form), AccessTokenResponse.class);
+                    .post(jakarta.ws.rs.client.Entity.form(form), AccessTokenResponse.class);
         } catch (Exception e) {
             throw new RuntimeException("Failed to refresh token: " + e.getMessage(), e);
         }
